@@ -32,8 +32,8 @@ class NewRedditSelectors {
 		return elem.querySelectorAll('a');
 	}
 	getTitle(elem) {
-		if (elem.querySelector('h2')) {
-			return elem.querySelector('h2');
+		if (elem.querySelector('h3')) {
+			return elem.querySelector('h3');
 		} else {
 			return elem.querySelector('h1');
 		}
@@ -52,7 +52,7 @@ class NewRedditSelectors {
 		return document.querySelectorAll('div.scrollerItem, div.Post');
 	}
 	getButtonLocation() {
-		return document.getElementById('header-quicklinks-oc').parentElement;
+		return document.getElementById('header-quicklinks-all').parentElement;
 	}
 	getAddNewComment(elem) {
 		return elem.querySelector('span.new-comments');
@@ -238,7 +238,7 @@ class RedditLink {
 		// dim the link
 		// this is a separate proc if we're wanting to color it or something in the future
 		if (this.title !== null) {
-			this.title.style.opacity = .4;
+			this.title.style.color = "rgb(111, 112, 113)";
 		}
 	}
 
@@ -461,8 +461,7 @@ class Synccit {
 		this.client = 'synccit-extension v1.' + version;
 
 		this.settings = new SynccitSettings(this);
-
-		this.synccitSender = null;
+		//this.synccitSender = null;
 
 	}
 
@@ -603,7 +602,7 @@ class SynccitSettings {
 
 	chromeLogin() {
 		// see if we can login the fancy chrome way. fall back to localstorage if we can't
-		if (typeof(chrome) !== 'undefined') {
+		if (typeof(chrome) !== 'undefined' && chrome.storage) {
 			chrome.storage.sync.get(["username", "auth", "api"], items => {
 				if (typeof items === 'object' && !this.isUndefined(items["api"]) && !this.isUndefined(items['username']) && !this.isUndefined(items['auth'])) {
 					this.synccit.setLogin(items['username'], items['auth'], items['api']);
@@ -648,7 +647,7 @@ class SynccitSettings {
 	}
 
 	storeChromeLogin() {
-		if (typeof(chrome) !== 'undefined') {
+		if (typeof(chrome) !== 'undefined' && chrome.storage) {
 			chrome.storage.sync.set({"username":this.synccit.username, "auth":this.synccit.auth, "api":this.synccit.api});
 			chrome.storage.local.set({"username":this.synccit.username, "auth":this.synccit.auth, "api":this.synccit.api});
 		}
